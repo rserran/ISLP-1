@@ -37,4 +37,7 @@ model = ols("Y~X", data = Boston).fit()
 print(model.summary())
 
 # plot graph with regression line
-print(sns.regplot(X, Y, data = Boston, color = 'g'))
+plt.figure(2).add_subplot(121)
+print(sns.regplot(X, Y, data = model, color = 'g'))
+plt.figure(2).add_subplot(122)
+print(sns.residplot(X, Y, lowess = True, color = 'r'))
