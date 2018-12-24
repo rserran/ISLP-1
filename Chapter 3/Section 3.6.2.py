@@ -38,9 +38,9 @@ print(model.summary())
 
 # predict the model
 dt = summary_table(model, alpha = 0.5)[1]
-Y_pred = dt[:, 2]
+Y_prd = dt[:, 2]
 Yprd_ci_lower, Yprd_ci_upper = dt[:, 6:8].T
-print(pd.DataFrame(np.column_stack([Y_pred, Yprd_ci_lower, Yprd_ci_upper])).head())
+print(pd.DataFrame(np.column_stack([Y_prd, Yprd_ci_lower, Yprd_ci_upper])).head())
 
 # plot graph with regression line
 plt.figure(2).add_subplot(121)
