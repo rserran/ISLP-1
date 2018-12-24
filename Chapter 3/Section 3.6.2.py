@@ -36,6 +36,12 @@ X = Boston['lstat']
 model = ols("Y~X", data = Boston).fit()
 print(model.summary())
 
+# predict the model
+dt = summary_table(model, alpha = 0.5)[1]
+Y_pred = dt[:, 2]
+Yprd_ci_lower, Yprd_ci_upper = dt[:, 6:8].T
+print(pd.DataFrame(np.column_stack([Y_pred, Yprd_ci_lower, Yprd_ci_upper])).head())
+
 # plot graph with regression line
 plt.figure(2).add_subplot(121)
 print(sns.regplot(X, Y, data = model, color = 'g'))
