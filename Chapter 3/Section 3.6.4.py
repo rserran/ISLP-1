@@ -28,7 +28,7 @@ model = ols('Y~X1*X2', data = Boston).fit()
 print(model.summary())
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-RESULTS OF THE REGRESSION (NOT A PART OF THE CODE)
+RESULTS (NOT PART OF CODE)
 
 runfile('/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python/Section3.6.4.py', wdir='/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python')
                             OLS Regression Results                            
