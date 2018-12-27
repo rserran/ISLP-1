@@ -10,6 +10,7 @@ Created on Mon Dec 24 15:15:26 2018
 import numpy as np
 import pandas as pd
 from statsmodels.formula.api import ols
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 # import data visualisation tools
 import matplotlib.pyplot as plt
@@ -22,9 +23,21 @@ print(Boston.head())
 
 # perform regression
 Y = Boston['medv']
-X1 = Boston['lstat']
-X2 = Boston['age']
-model = ols("Y ~ X1 + X2", data = Boston).fit()
+X1 = Boston['crim']
+X2 = Boston['zn']
+X3 = Boston['indus']
+X4 = Boston['chas']
+X5 = Boston['nox']
+X6 = Boston['rm']
+X7 = Boston['age']
+X8 = Boston['dis']
+X9 = Boston['rad']
+X10 = Boston['tax']
+X11 = Boston['ptratio']
+X12 = Boston['black']
+X13 = Boston['lstat']
+
+model = ols("Y~X1+X2+X3+X4+X5+X6+X7+X8+X9+X10+X11+X12", data = Boston).fit()
 print(model.summary())
 
 # calculate and display variance inflation factor
