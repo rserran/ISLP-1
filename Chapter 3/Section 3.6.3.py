@@ -53,7 +53,7 @@ vif["Features"] = Bostondf.columns
 print(vif["Variance Inflation Factor"])
 print(vif["Features"])
 
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 RESULTS OF THE REGRESSION (NOT A PART OF THE CODE)
 
 runfile('/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python/Section3.6.3.py', wdir='/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python')
@@ -66,7 +66,7 @@ runfile('/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python/Section3
 
 [5 rows x 14 columns]
 
-<Pairwise Scatter Plot here - Boston Pairplot Scatter Matrix.png>
+<Boston Pairplot Scatter Matrix.png>
 
                             OLS Regression Results                            
 ==============================================================================
