@@ -1,2 +1,5 @@
 # ISLR-Python
-ISLR is a great book as an introduction to Machine Learning. I am currently reading it. But it's written in R. So, I am "translating" some (read: as much as I can) of the R code into Python code. Any comment/critique is welcome.
+
+I am currently reading An Introduction to Statistical Learning with Applications in R ("ISLR" for short). It's a great practical introduction to machine learning. This repository is my personal attempt to "translate" as much code as I can into Python as I go along.
+
+The repository is built into different sections and exercises. I am not providing solutions to any conceptual exercise question, but will provide the Python code for answers. I will include any relevant concept or rationale as comments within the code.  
