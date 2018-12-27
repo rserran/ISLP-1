@@ -15,11 +15,14 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 # import data visualisation tools
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pandas.plotting import scatter_matrix
 
-# load data
+# load and visualise data
 url = "/Users/arpanganguli/Documents/Finance : ML/ISLR/Datasets/Boston.csv"
 Boston = pd.read_csv(url, index_col = 'Unnamed: 0')
 print(Boston.head())
+scatter_matrix(Boston)
+plt.show()
 
 # perform regression
 Y = Boston['medv']
@@ -62,6 +65,9 @@ runfile('/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python/Section3
 5  0.06905   0.0   2.18     0  0.458  ...   222     18.7  396.90   5.33  36.2
 
 [5 rows x 14 columns]
+
+<Pairwise Scatter Plot here - Scatter_Plot3.6.3.png>
+
                             OLS Regression Results                            
 ==============================================================================
 Dep. Variable:                      Y   R-squared:                       0.741
