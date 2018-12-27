@@ -23,7 +23,7 @@ Boston = pd.read_csv(url, index_col = 'Unnamed: 0')
 # perform regression
 Y = Boston['medv']
 X1 = Boston['lstat']
-X2 = lambda X1 : pow(X1,2)
+X2 = lambda X1 : pow(X1,2) # X2 is a lambda function that raises each element of X1 to the power of 2
 model = ols('Y~X1+X2(X1)', data = Boston).fit()
 print(model.summary())
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
