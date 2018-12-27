@@ -113,3 +113,5 @@ AxesSubplot(0.125,0.125;0.352273x0.755)
 /anaconda3/lib/python3.6/site-packages/scipy/stats/stats.py:1713: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
 AxesSubplot(0.547727,0.125;0.352273x0.755)
+
+<Boston - Regression and Residuals.png>
