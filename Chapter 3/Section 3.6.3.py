@@ -66,7 +66,7 @@ runfile('/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python/Section3
 
 [5 rows x 14 columns]
 
-<Pairwise Scatter Plot here - Scatter_Plot3.6.3.png>
+<Pairwise Scatter Plot here - Boston Pairplot Scatter Matrix.png>
 
                             OLS Regression Results                            
 ==============================================================================
