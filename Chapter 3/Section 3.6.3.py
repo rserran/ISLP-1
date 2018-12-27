@@ -26,3 +26,11 @@ X1 = Boston['lstat']
 X2 = Boston['age']
 model = ols("Y ~ X1 + X2", data = Boston).fit()
 print(model.summary())
+
+# calculate and display variance inflation factor
+vif = pd.DataFrame()
+vif["Variance Inflation Factor"] = [variance_inflation_factor(Boston.values, i)\
+for i in range(Boston.shape[1])]
+vif["Features"] = Boston.columns
+print(vif["Variance Inflation Factor"])
+print(vif["Features"])
