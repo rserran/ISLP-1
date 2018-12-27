@@ -54,7 +54,7 @@ print(vif["Variance Inflation Factor"])
 print(vif["Features"])
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-RESULTS OF THE REGRESSION (NOT A PART OF THE CODE)
+RESULTS (NOT PART OF CODE)
 
 runfile('/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python/Section3.6.3.py', wdir='/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python')
       crim    zn  indus  chas    nox  ...   tax  ptratio   black  lstat  medv
