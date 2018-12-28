@@ -42,8 +42,11 @@ print("The mean of mpg is: %f" % mpg_mean)
 perc_error = (rse * 100) / mpg_mean
 print("The percentage error is: %f%%" % perc_error)
 
-# predict values
-
+# plot relationship between predictor and response
+b0 = model.params[0]
+b1 = model.params[1]
+Yhat = b0 + (X*b1)
+plt.scatter(X, Yhat)
 
 """
 a.i. Given the F-Statistic > 1 and p-value of that F-Statistic is close to 0 (and << 0.005), there is a statistically significant
@@ -72,47 +75,7 @@ Dep. Variable:                      Y   R-squared:                       0.606
 Model:                            OLS   Adj. R-squared:                  0.605
 Method:                 Least Squares   F-statistic:                     599.7
 Date:                Fri, 28 Dec 2018   Prob (F-statistic):           7.03e-81
-Time:                        22:10:57   Log-Likelihood:                -1178.7
-No. Observations:                 392   AIC:                             2361.
-Df Residuals:                     390   BIC:                             2369.
-Df Model:                           1                                         
-Covariance Type:            nonrobust                                         
-==============================================================================
-                 coef    std err          t      P>|t|      [0.025      0.975]
-------------------------------------------------------------------------------
-Intercept     39.9359      0.717     55.660      0.000      38.525      41.347
-X             -0.1578      0.006    -24.489      0.000      -0.171      -0.145
-==============================================================================
-Omnibus:                       16.432   Durbin-Watson:                   0.920
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):               17.305
-Skew:                           0.492   Prob(JB):                     0.000175
-Kurtosis:                       3.299   Cond. No.                         322.
-==============================================================================
-
-Warnings:
-[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-
-The Root Square Error is: 4.905757
-The mean of mpg is: 23.445918
-The percentage error is: 20.923714 %
-
-runfile('/Users/arpanganguli/Documents/Finance/ISLR/Codes - Python/Applied Exercises/8.py', wdir='/Users/arpanganguli/Documents/Finance/ISLR/Codes - Python/Applied Exercises')
-    mpg  cylinders            ...              origin                       name
-0  18.0          8            ...                   1  chevrolet chevelle malibu
-1  15.0          8            ...                   1          buick skylark 320
-2  18.0          8            ...                   1         plymouth satellite
-3  16.0          8            ...                   1              amc rebel sst
-4  17.0          8            ...                   1                ford torino
-
-[5 rows x 9 columns]
-['mpg', 'cylinders', 'displacement', 'horsepower', 'weight', 'acceleration', 'year', 'origin', 'name']
-                            OLS Regression Results                            
-==============================================================================
-Dep. Variable:                      Y   R-squared:                       0.606
-Model:                            OLS   Adj. R-squared:                  0.605
-Method:                 Least Squares   F-statistic:                     599.7
-Date:                Fri, 28 Dec 2018   Prob (F-statistic):           7.03e-81
-Time:                        22:11:01   Log-Likelihood:                -1178.7
+Time:                        22:38:21   Log-Likelihood:                -1178.7
 No. Observations:                 392   AIC:                             2361.
 Df Residuals:                     390   BIC:                             2369.
 Df Model:                           1                                         
