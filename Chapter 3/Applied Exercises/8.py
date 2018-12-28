@@ -55,7 +55,7 @@ a.ii. To determine the strength of the relationship between the predictor (horse
    the RSE of the predictor (as determined by the model) and the mean of the response, since it would show how strongly it actually predicts
    the true values of the response. (Another way would be to show R^2 since it would determine how much the regressed model actually explains
    the true values of the response). The RSE is 4.905757 and the mean of mpg is 23.445918, which means the percentage error is 20.923714%. The R^2 value is 0.795 or 79.5%.
-a.iii. Negative relationship. An increase in horsepower is related to a decrease in mpg.
+a.iii. Negative relationship. An increase in horsepower is related to a decrease in mpg. See graph <Auto_mpg_hp - Predicted.png>
 a.iv. 
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,3 +98,5 @@ Warnings:
 The Root Square Error is: 4.905757
 The mean of mpg is: 23.445918
 The percentage error is: 20.923714%
+
+<Auto_mpg_hp - Predicted.png>
