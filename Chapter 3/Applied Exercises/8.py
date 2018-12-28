@@ -20,6 +20,15 @@ print(list(Auto))
 # run regression (I am not visualising the data for the sake of brevity. But it is highly recommended as first step afer importing data)
 model = ols("Auto['mpg'] ~ Auto['horsepower']", data = Auto).fit()
 print(model.summary())
+print()
+
+# calculate relationship between predictor(horsepower) and response(mpg)
+rse = np.sqrt(model.scale)
+print("The Root Square Error is: %f" % rse)
+mpg_mean = np.mean(Auto['mpg'])
+print("The mean of mpg is: %f" % mpg_mean)
+perc_error = (rse * 100) / mpg_mean
+print("The percentage error is: %f" % perc_error)
 
 """
 I was initially surprised to see the results given the number of parameters for horsepower in the solutions. But then I realised horsepower
@@ -29,9 +38,14 @@ are a lot of other reasons why one should view and understand the data beforehan
 """
 
 """
-a. Given the F-Statistic > 1 and p-value of that F-Statistic is close to 0 (and << 0.005), there is a statistically significant
+a.i. Given the F-Statistic > 1 and p-value of that F-Statistic is close to 0 (and << 0.005), there is a statistically significant
    relationship between mpg and horespower.
-b. 
+a.ii. To determine the strength of the relationship between the predictor (horsepower) and response (mpg), we need to calculate the ratio of 
+   the RSE of the predictor (as determined by the model) and the mean of the response, since it would show how strongly it actually predicts
+   the true values of the response. (Another way would be to show R^2 since it would determine how much the regressed model actually explains
+   the true values of the response). The RSE is 4.055631 and the mean of mpg is 23.515869, which means the percentage error is 17.246357%. The R^2 value is 0.795 or 79.5%.
+a.iii. Negative relationship. An increase in horsepower is related to a decrease in mpg.
+a.iv. 
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 runfile('/Users/arpanganguli/Documents/Finance/ISLR/Codes - Python/Applied Exercises/8.py', wdir='/Users/arpanganguli/Documents/Finance/ISLR/Codes - Python/Applied Exercises')
@@ -166,3 +180,7 @@ Kurtosis:                       4.831   Cond. No.                         49.7
 
 Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+The Root Square Error is: 4.055631
+The mean of mpg is: 23.515869
+The percentage error is: 17.246357
