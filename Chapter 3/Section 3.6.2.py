@@ -49,7 +49,6 @@ plt.figure(2).add_subplot(122)
 print(sns.residplot(X, Y, lowess = True, color = 'r'))
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 RESULTS (NOT PART OF CODE)
 
 runfile('/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python/Section3.6.2.py', wdir='/Users/arpanganguli/Documents/Finance : ML/ISLR/Codes - Python')
