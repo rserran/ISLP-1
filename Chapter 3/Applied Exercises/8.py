@@ -7,8 +7,10 @@ Created on Fri Dec 28 15:41:50 2018
 """
 
 # import statistical tools
+from __future__ import print_function
 import numpy as np
 import pandas as pd
+import statsmodels.api as sm
 from statsmodels.formula.api import ols
 from sklearn.linear_model import LinearRegression
 
@@ -27,8 +29,8 @@ print(list(Auto))
 Auto = Auto.drop(Auto.index[[32, 126, 330, 336, 354]]) # removing rows containing "?". This is the easy way out. Such missing values need to be explored first in a real life situation.
 
 # run regression (I am not visualising the data for the sake of brevity. But it is highly recommended as first step afer importing data)
-Y = Auto['mpg'].astype(float)
-X = Auto['horsepower'].astype(float)
+Y = Auto.mpg.astype(float)
+X = Auto.horsepower.astype(float)
 model = ols("Y ~ X", data = Auto).fit()
 print(model.summary())
 print()
@@ -41,12 +43,12 @@ mpg_mean = np.mean(Auto['mpg'])
 print("The mean of mpg is: %f" % mpg_mean)
 perc_error = (rse * 100) / mpg_mean
 print("The percentage error is: %f%%" % perc_error)
+print()
 
 # plot relationship between predictor and response
-b0 = model.params[0]
-b1 = model.params[1]
-Yhat = b0 + (X*b1)
-plt.scatter(X, Yhat)
+X = sm.add_constant(X) # statsmodels does not inlude constant in its predictions. So, you need to add it separately
+Yhat = model.predict(X)
+plt.scatter(X.horsepower,Yhat, color = 'chartreuse') # colour is just for fun
 
 """
 a.i. Given the F-Statistic > 1 and p-value of that F-Statistic is close to 0 (and << 0.005), there is a statistically significant
