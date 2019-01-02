@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Dec 28 15:41:50 2018
-
 @author: arpanganguli
 """
 
@@ -13,6 +12,7 @@ import pandas as pd
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 from sklearn.linear_model import LinearRegression
+import scipy.stats as stats
 
 # import data visualisation tools
 import matplotlib.pyplot as plt
@@ -34,21 +34,21 @@ X = Auto.horsepower.astype(float)
 model = ols("Y ~ X", data = Auto).fit()
 print(model.summary())
 print()
+values = slope, intercept, r_value, p_value, std_err = stats.linregress(X, Y)
 
+X1 = Auto[['horsepower']]
+Y1 = Auto['mpg']
+lm = LinearRegression().fit(X1, Y1)
+print("Coefficients: ", lm.coef_)
+print("Intercepts: ", lm.intercept_)
+Y2 = [[98]]
+predictions = lm.predict(Y2)
+print("Predicted value at X = 98: ", predictions)
 
-# calculate relationship between predictor(horsepower) and response(mpg)
-rse = np.sqrt(model.scale)
-print("The Root Square Error is: %f" % rse)
-mpg_mean = np.mean(Auto['mpg'])
-print("The mean of mpg is: %f" % mpg_mean)
-perc_error = (rse * 100) / mpg_mean
-print("The percentage error is: %f%%" % perc_error)
-print()
+# plot relationships
+plotdata = pd.concat([X, Y], axis = 1)
+sns.lmplot(x = "horsepower", y = "mpg", data = plotdata)
 
-# plot relationship between predictor and response
-X = sm.add_constant(X) # statsmodels does not inlude constant in its predictions. So, you need to add it separately
-Yhat = model.predict(X)
-plt.scatter(X.horsepower,Yhat, color = 'chartreuse') # colour is just for fun
 
 """
 a.i. Given the F-Statistic > 1 and p-value of that F-Statistic is close to 0 (and << 0.005), there is a statistically significant
@@ -58,10 +58,12 @@ a.ii. To determine the strength of the relationship between the predictor (horse
    the true values of the response. (Another way would be to show R^2 since it would determine how much the regressed model actually explains
    the true values of the response). The RSE is 4.905757 and the mean of mpg is 23.445918, which means the percentage error is 20.923714%. The R^2 value is 0.795 or 79.5%.
 a.iii. Negative relationship. An increase in horsepower is related to a decrease in mpg. See graph <Auto_mpg_hp - Predicted.png>
-a.iv. 
+a.iv. 24.46707715
+
+b. <mpg~horsepower.png>
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-runfile('/Users/arpanganguli/Documents/Finance/ISLR/Codes - Python/Applied Exercises/8.py', wdir='/Users/arpanganguli/Documents/Finance/ISLR/Codes - Python/Applied Exercises')
+runfile('/Users/arpanganguli/.spyder-py3/temp.py', wdir='/Users/arpanganguli/.spyder-py3')
     mpg  cylinders            ...              origin                       name
 0  18.0          8            ...                   1  chevrolet chevelle malibu
 1  15.0          8            ...                   1          buick skylark 320
@@ -76,8 +78,8 @@ runfile('/Users/arpanganguli/Documents/Finance/ISLR/Codes - Python/Applied Exerc
 Dep. Variable:                      Y   R-squared:                       0.606
 Model:                            OLS   Adj. R-squared:                  0.605
 Method:                 Least Squares   F-statistic:                     599.7
-Date:                Fri, 28 Dec 2018   Prob (F-statistic):           7.03e-81
-Time:                        22:38:21   Log-Likelihood:                -1178.7
+Date:                Wed, 02 Jan 2019   Prob (F-statistic):           7.03e-81
+Time:                        20:24:56   Log-Likelihood:                -1178.7
 No. Observations:                 392   AIC:                             2361.
 Df Residuals:                     390   BIC:                             2369.
 Df Model:                           1                                         
@@ -97,8 +99,8 @@ Kurtosis:                       3.299   Cond. No.                         322.
 Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 
-The Root Square Error is: 4.905757
-The mean of mpg is: 23.445918
-The percentage error is: 20.923714%
+Coefficients:  [-0.15784473]
+Intercepts:  39.93586102117047
+Predicted value at X = 98:  [24.46707715]
 
 <Auto_mpg_hp - Predicted.png>
