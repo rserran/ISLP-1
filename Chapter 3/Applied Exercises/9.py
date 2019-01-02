@@ -33,9 +33,24 @@ values need to be explored first in a real life situation.
 """
 print(Auto.info())
 
-# 9.a. Scatterplot Matrix
-sns.pairplot(Auto, hue = "origin")
-
 # 9.b. Correlation Matrix
 Correlation_Matrix = Auto.corr()
 print(Correlation_Matrix)
+
+# 9.c. Run multivariate regression
+
+Auto['hp'] = Auto['horsepower'].astype(float)
+"""
+For some annoying reason, Python is importing the horsepower
+column as string and not float. This will impact the regression
+results since we cannot regress string values. So, I am converting
+this column into float and storing the values in to a new column
+called "hp". I will use the values in "hp" to regress "mpg".
+"""
+
+X = Auto[['cylinders', 'displacement', 'hp', 'weight',
+       'acceleration', 'year', 'origin']]
+Y = Auto['mpg']
+X1 = sm.add_constant(X)
+reg = sm.OLS(Y, X1).fit()
+print(reg.summary())
