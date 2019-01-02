@@ -33,6 +33,9 @@ values need to be explored first in a real life situation.
 """
 print(Auto.info())
 
+# 9.a. Scatterplot Matrix
+sns.pairplot(Auto, hue = "origin")
+
 # 9.b. Correlation Matrix
 Correlation_Matrix = Auto.corr()
 print(Correlation_Matrix)
