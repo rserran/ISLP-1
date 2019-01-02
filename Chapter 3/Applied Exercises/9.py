@@ -126,3 +126,5 @@ Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 [2] The condition number is large, 8.59e+04. This might indicate that there are
 strong multicollinearity or other numerical problems.
+
+<Auto - Scatterplot Matrix.png>
