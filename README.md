@@ -13,4 +13,4 @@ This repository is divided into chapters. Each chapter is divided into two subfo
 2. **Applied Exercises:** This contains Python Codes from Applied Exercises from each chapter. The Applied Exercises will contain some sub-questions which ask the reader to interpret the model rather than code it. I will provide solutions to those questions for the sake of completeness.
 
 ** Table of Contents**
-1. [Chapter 3: Linear Regression](https://github.com/arpanganguli/ISLP/tree/master/Chapter 3)
+1. [Chapter 3: Linear Regression](https://www.google.com)
