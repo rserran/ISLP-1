@@ -38,7 +38,14 @@ ceterus paribus the sales decrease by 0.219 units. Likewise, for a location in t
 increases the sales by 1.2006 units.
 
 10.c. Sales = 13.0435 - 0.0545*Price - 0.0219 + 1.2006 => Sales = 14.8305 - 0.0545*Price
+
+10.d. We can reject "Urban" predictor, given it's high p-value(0.936).
+
 """
+
+# 10.e. Regression with better fit and lesser predictors
+reg = ols(formula = 'Sales ~ Price + C(US)', data = CarSeats).fit()
+print(reg.summary())
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 RESULTS (NOT PART OF CODE)
@@ -94,6 +101,33 @@ Omnibus:                        0.676   Durbin-Watson:                   1.912
 Prob(Omnibus):                  0.713   Jarque-Bera (JB):                0.758
 Skew:                           0.093   Prob(JB):                        0.684
 Kurtosis:                       2.897   Cond. No.                         628.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  Sales   R-squared:                       0.239
+Model:                            OLS   Adj. R-squared:                  0.235
+Method:                 Least Squares   F-statistic:                     62.43
+Date:                Thu, 03 Jan 2019   Prob (F-statistic):           2.66e-24
+Time:                        22:04:52   Log-Likelihood:                -927.66
+No. Observations:                 400   AIC:                             1861.
+Df Residuals:                     397   BIC:                             1873.
+Df Model:                           2                                         
+Covariance Type:            nonrobust                                         
+================================================================================
+                   coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------
+Intercept       13.0308      0.631     20.652      0.000      11.790      14.271
+C(US)[T.Yes]     1.1996      0.258      4.641      0.000       0.692       1.708
+Price           -0.0545      0.005    -10.416      0.000      -0.065      -0.044
+==============================================================================
+Omnibus:                        0.666   Durbin-Watson:                   1.912
+Prob(Omnibus):                  0.717   Jarque-Bera (JB):                0.749
+Skew:                           0.092   Prob(JB):                        0.688
+Kurtosis:                       2.895   Cond. No.                         607.
 ==============================================================================
 
 Warnings:
