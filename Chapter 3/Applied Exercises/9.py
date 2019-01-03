@@ -50,12 +50,46 @@ results since we cannot regress string values. So, I am converting
 this column into float and storing the values in to a new column
 called "hp". I will use the values in "hp" to regress "mpg".
 """
-
 X = Auto[['cylinders', 'displacement', 'hp', 'weight',
        'acceleration', 'year', 'origin']]
 Y = Auto['mpg']
 X1 = sm.add_constant(X)
 reg = sm.OLS(Y, X1).fit()
+print(reg.summary())
+
+# 9.e. Run multivariate regression with interaction terms
+
+Auto['hp'] = Auto['horsepower'].astype(float)
+"""
+For some annoying reason, Python is importing the horsepower
+column as string and not float. This will impact the regression
+results since we cannot regress string values. So, I am converting
+this column into float and storing the values in to a new column
+called "hp". I will use the values in "hp" to regress "mpg".
+"""
+
+X1 = Auto['hp']
+X2 = Auto['weight']
+X3 = Auto['acceleration']
+X4 = Auto['year']
+X5 = Auto['origin']
+X6 = Auto['displacement']
+X7 = Auto['cylinders']
+Y = Auto['mpg']
+
+reg = ols("Y~X1+X2+X3+X4+X5+X6+X7+I(np.log(X1))+I(X4^2)", data = Auto).fit()
+"""
+I randomly chose two transformations for two variables:
+    1.  Log-transformation for X1: OLS result suggests that for a unit
+        change in log(X1), the miles per gallon reduces by ~27.2 units
+    2. Square of X4: OLS result suggests that for a unit increase in 
+        X4^2, the miles per gallon reduces by 0.12 units. However, the
+        high p-value of this statistic suggests that the null hypothesis
+        cannot be rejected. Therefore, essentially there is no difference
+        between this particular value and 0, and therefore this statistic
+        can be discarded.
+        
+"""
 print(reg.summary())
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 runfile('/Users/arpanganguli/.spyder-py3/temp.py', wdir='/Users/arpanganguli/.spyder-py3')
@@ -125,6 +159,43 @@ Kurtosis:                       4.460   Cond. No.                     8.59e+04
 Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 [2] The condition number is large, 8.59e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.
+
+ OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      Y   R-squared:                       0.859
+Model:                            OLS   Adj. R-squared:                  0.855
+Method:                 Least Squares   F-statistic:                     232.0
+Date:                Thu, 03 Jan 2019   Prob (F-statistic):          2.98e-155
+Time:                        16:36:22   Log-Likelihood:                -977.34
+No. Observations:                 392   AIC:                             1977.
+Df Residuals:                     381   BIC:                             2020.
+Df Model:                          10                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept     -6.8302      6.090     -1.122      0.263     -18.805       5.144
+X1            -0.0355      0.013     -2.693      0.007      -0.061      -0.010
+X2            -0.0093      0.002     -3.929      0.000      -0.014      -0.005
+X3             0.0603      0.089      0.677      0.499      -0.115       0.235
+X4             0.7831      0.046     17.120      0.000       0.693       0.873
+X5             0.5193      0.271      1.919      0.056      -0.013       1.051
+X6            -0.0859      0.031     -2.738      0.006      -0.148      -0.024
+X7             0.5961      1.536      0.388      0.698      -2.423       3.616
+X7:X6          0.0019      0.003      0.622      0.535      -0.004       0.008
+X7:X2         -0.0003      0.001     -0.498      0.618      -0.001       0.001
+X6:X2       2.386e-05   6.16e-06      3.872      0.000    1.17e-05     3.6e-05
+==============================================================================
+Omnibus:                       45.965   Durbin-Watson:                   1.409
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               99.574
+Skew:                           0.628   Prob(JB):                     2.39e-22
+Kurtosis:                       5.125   Cond. No.                     3.48e+07
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 3.48e+07. This might indicate that there are
 strong multicollinearity or other numerical problems.
 
 <Auto - Scatterplot Matrix.png>
