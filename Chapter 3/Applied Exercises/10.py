@@ -47,6 +47,42 @@ increases the sales by 1.2006 units.
 reg = ols(formula = 'Sales ~ Price + C(US)', data = CarSeats).fit()
 print(reg.summary())
 
+# run predictions
+
+predictions_1 = pd.DataFrame(reg_1.predict())
+residuals_1 = CarSeats['Sales'] - predictions_1[0]
+plt.figure()
+sns.distplot(residuals_1) # residuals are normally distributed. Love it!!!
+
+reg_2 = ols(formula = 'Sales ~ Price + C(US)', data = CarSeats).fit()
+print(reg_2.summary())
+predictions_2 = pd.DataFrame(reg_2.predict())
+residuals_2 = CarSeats['Sales'] - predictions_2[0]
+plt.figure()
+sns.distplot(residuals_2) # residuals are normally distributed. Love it!!!
+
+# error calculations
+Y = CarSeats['Sales']
+Yhat_1 = predictions_1[0]
+Yhat_2 = predictions_2[0]
+
+MAE_1 = metrics.mean_absolute_error(Y, Yhat_1)
+MSE_1 = metrics.mean_squared_error(Y, Yhat_1)
+RMSE_1 = np.sqrt(MSE_1)
+
+print("Model#1 Mean Absolute Error: %f" % MAE_1)
+print("Model#1 Mean Squared Error : %f" % MSE_1)
+print("Model#1 Root Mean Squared Error: %f" % RMSE_1)
+
+MAE_2 = metrics.mean_absolute_error(Y, Yhat_2)
+MSE_2 = metrics.mean_squared_error(Y, Yhat_2)
+RMSE_2 = np.sqrt(MSE_2)
+print()
+
+print("Model#1 Mean Absolute Error: %f" % MAE_2)
+print("Model#1 Mean Squared Error : %f" % MSE_2)
+print("Model#1 Root Mean Squared Error: %f" % RMSE_2)
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 RESULTS (NOT PART OF CODE)
 
