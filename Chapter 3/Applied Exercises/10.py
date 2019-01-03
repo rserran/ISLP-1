@@ -168,3 +168,11 @@ Kurtosis:                       2.895   Cond. No.                         607.
 
 Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+Model#1 Mean Absolute Error: 1.958839
+Model#1 Mean Squared Error : 6.052087
+Model#1 Root Mean Squared Error: 2.460099
+
+Model#1 Mean Absolute Error: 1.959480
+Model#1 Mean Squared Error : 6.052186
+Model#1 Root Mean Squared Error: 2.460119
