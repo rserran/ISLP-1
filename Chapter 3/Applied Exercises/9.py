@@ -59,15 +59,6 @@ print(reg.summary())
 
 # 9.e. Run multivariate regression with interaction terms
 
-Auto['hp'] = Auto['horsepower'].astype(float)
-"""
-For some annoying reason, Python is importing the horsepower
-column as string and not float. This will impact the regression
-results since we cannot regress string values. So, I am converting
-this column into float and storing the values in to a new column
-called "hp". I will use the values in "hp" to regress "mpg".
-"""
-
 X1 = Auto['hp']
 X2 = Auto['weight']
 X3 = Auto['acceleration']
@@ -87,8 +78,7 @@ I randomly chose two transformations for two variables:
         high p-value of this statistic suggests that the null hypothesis
         cannot be rejected. Therefore, essentially there is no difference
         between this particular value and 0, and therefore this statistic
-        can be discarded.
-        
+        can be discarded.        
 """
 print(reg.summary())
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
