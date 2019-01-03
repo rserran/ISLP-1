@@ -57,7 +57,7 @@ X1 = sm.add_constant(X)
 reg = sm.OLS(Y, X1).fit()
 print(reg.summary())
 
-# 9.e. Run multivariate regression with interaction terms
+# 9.e. & 9.f. Run multivariate regression with interaction terms and transformations
 
 X1 = Auto['hp']
 X2 = Auto['weight']
@@ -67,6 +67,19 @@ X5 = Auto['origin']
 X6 = Auto['displacement']
 X7 = Auto['cylinders']
 Y = Auto['mpg']
+
+reg = ols("Y~X1+X2+X3+X4+X5+X6+X7+X7*X6+X7*X2+X6*X2", data = Auto).fit()
+"""
+There is no pure statistical method to assess interaction terms. ISLR 
+provides some clever examples to deduce this. But ultimately, it will depend
+on chopping and changing between different independent variables depending
+on your research goals. This question on Stats Stack Exchange provides an
+excellent answer - http://bit.ly/2ApTvQ4
+
+For the sake of brevity, I have included interactions between terms with
+higest covariance amongst them.
+"""
+print(reg.summary())
 
 reg = ols("Y~X1+X2+X3+X4+X5+X6+X7+I(np.log(X1))+I(X4^2)", data = Auto).fit()
 """
