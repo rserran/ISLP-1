@@ -28,11 +28,17 @@ print(CarSeats.head())
 print(list(CarSeats))
 print(CarSeats.info())
 
-# run regression
-reg = ols(formula = 'Sales ~ Price + C(Urban) + C(US)', data = CarSeats).fit()
+# 10.a. Multiple regression
+reg = ols(formula = 'Sales ~ Price + C(Urban) + C(US)', data = CarSeats).fit() # C prepares categorical data for regression
 print(reg.summary())
 
+"""
+The anse
+"""
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+RESULTS (NOT PART OF CODE)
+
 runfile('/Users/arpanganguli/Desktop/untitled0.py', wdir='/Users/arpanganguli/Desktop')
    SlNo  Sales  CompPrice  Income ...   Age  Education  Urban   US
 0     1   9.50        138      73 ...    42         17    Yes  Yes
