@@ -95,6 +95,8 @@ I randomly chose two transformations for two variables:
 """
 print(reg.summary())
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+RESULTS (NOT PART OF CODE)
+
 runfile('/Users/arpanganguli/.spyder-py3/temp.py', wdir='/Users/arpanganguli/.spyder-py3')
     mpg  cylinders            ...              origin                       name
 0  18.0          8            ...                   1  chevrolet chevelle malibu
