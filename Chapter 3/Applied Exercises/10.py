@@ -83,6 +83,12 @@ print("Model#1 Mean Absolute Error: %f" % MAE_2)
 print("Model#1 Mean Squared Error : %f" % MSE_2)
 print("Model#1 Root Mean Squared Error: %f" % RMSE_2)
 
+"""
+10.g. From the OLS results, these are the 95% confidence intervals:
+Intercept: (11.790, 14.271)
+US: (0.692, 1.708)
+Price: (-0.065, -0.044)
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 RESULTS (NOT PART OF CODE)
 
