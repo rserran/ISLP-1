@@ -469,4 +469,11 @@ RMSE_i_2: 4.453531569897252
 0  -1.009130  0.500265     -0.016972
 1  -0.979878  0.527144      0.004251
 
-
+<Distplot of x.png>
+<Displot of eps.png>
+<xy-scatterplot.png>
+<xy_regression_plot.png>
+<xy_r.scatterplot.png>
+<xy_r.regression_plot.png>
+<xy_1.scatterplot.png>
+<xy_1.regression_plot.png>
