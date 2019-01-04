@@ -95,26 +95,39 @@ Price: (-0.065, -0.044)
 # residuals vs fitted plot
 plt.xkcd()
 plt.figure(figsize = (11, 5))
-sns.regplot(reg_2.resid_pearson, Yhat_2, fit_reg = True, color = 'g')
-plt.title("Residuals vs Fitted")
+sns.regplot(Yhat_2, reg_2.resid_pearson, fit_reg = True, color = 'g')
+plt.title("Residuals vs Fitted - Residuals_2")
 
 # normal q-q plot
 plt.xkcd()
 plt.figure(figsize = (11, 5))
 stats.probplot(residuals_2, plot = plt)
-plt.title("Normal Q-Q Plot - Residuals_2")
+plt.title("Normal Q-Q Plot - Residuals_2 - v1")
 plt.show()
 
 plt.xkcd()
 plt.figure(figsize = (11, 5))
 sm.qqplot(reg_2.resid_pearson, fit = True, line = 'r') # another way to do it
+plt.title("Normal Q-Q Plot - Residuals_2 - v2")
+fig = plt.gcf()
+fig.set_size_inches(11, 5)
 plt.show()
 
 # scale-location plot
+plt.xkcd()
+plt.figure(figsize = (11, 5))
+sns.regplot(Yhat_2, np.sqrt(reg_2.resid_pearson), fit_reg = True, color = 'y')
+plt.title("Scale-Location Plot - Residuals_2")
 
 # residuals vs leverage plot
-
-
+plt.xkcd()
+fig = plt.figure(figsize = (11, 5))
+fig.set_size_inches(30, fig.get_figheight(), forward=True)
+sm.graphics.influence_plot(reg_2, criterion="cooks", size = 0.0002**2)
+plt.title("Residuals vs Leverage - Residuals_2")
+fig = plt.gcf()
+fig.set_size_inches(11, 5)
+plt.show()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 RESULTS (NOT PART OF CODE)
 
@@ -151,8 +164,8 @@ None
 Dep. Variable:                  Sales   R-squared:                       0.239
 Model:                            OLS   Adj. R-squared:                  0.234
 Method:                 Least Squares   F-statistic:                     41.52
-Date:                Thu, 03 Jan 2019   Prob (F-statistic):           2.39e-23
-Time:                        20:45:10   Log-Likelihood:                -927.66
+Date:                Fri, 04 Jan 2019   Prob (F-statistic):           2.39e-23
+Time:                        02:26:10   Log-Likelihood:                -927.66
 No. Observations:                 400   AIC:                             1863.
 Df Residuals:                     396   BIC:                             1879.
 Df Model:                           3                                         
@@ -173,14 +186,13 @@ Kurtosis:                       2.897   Cond. No.                         628.
 
 Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-
-OLS Regression Results                            
+                            OLS Regression Results                            
 ==============================================================================
 Dep. Variable:                  Sales   R-squared:                       0.239
 Model:                            OLS   Adj. R-squared:                  0.235
 Method:                 Least Squares   F-statistic:                     62.43
-Date:                Thu, 03 Jan 2019   Prob (F-statistic):           2.66e-24
-Time:                        22:04:52   Log-Likelihood:                -927.66
+Date:                Fri, 04 Jan 2019   Prob (F-statistic):           2.66e-24
+Time:                        02:26:10   Log-Likelihood:                -927.66
 No. Observations:                 400   AIC:                             1861.
 Df Residuals:                     397   BIC:                             1873.
 Df Model:                           2                                         
@@ -200,7 +212,6 @@ Kurtosis:                       2.895   Cond. No.                         607.
 
 Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-
 Model#1 Mean Absolute Error: 1.958839
 Model#1 Mean Squared Error : 6.052087
 Model#1 Root Mean Squared Error: 2.460099
@@ -208,3 +219,7 @@ Model#1 Root Mean Squared Error: 2.460099
 Model#1 Mean Absolute Error: 1.959480
 Model#1 Mean Squared Error : 6.052186
 Model#1 Root Mean Squared Error: 2.460119
+
+/anaconda3/lib/python3.6/site-packages/scipy/stats/stats.py:1713: FutureWarning:
+
+Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
