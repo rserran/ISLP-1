@@ -88,6 +88,32 @@ print("Model#1 Root Mean Squared Error: %f" % RMSE_2)
 Intercept: (11.790, 14.271)
 US: (0.692, 1.708)
 Price: (-0.065, -0.044)
+"""
+
+# 10.h. Create plots and find evidence of outliers and high leverage observations
+
+# residuals vs fitted plot
+plt.xkcd()
+plt.figure(figsize = (11, 5))
+sns.regplot(reg_2.resid_pearson, Yhat_2, fit_reg = True, color = 'g')
+plt.title("Residuals vs Fitted")
+
+# normal q-q plot
+plt.xkcd()
+plt.figure(figsize = (11, 5))
+stats.probplot(residuals_2, plot = plt)
+plt.title("Normal Q-Q Plot - Residuals_2")
+plt.show()
+
+plt.xkcd()
+plt.figure(figsize = (11, 5))
+sm.qqplot(reg_2.resid_pearson, fit = True, line = 'r') # another way to do it
+plt.show()
+
+# scale-location plot
+
+# residuals vs leverage plot
+
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 RESULTS (NOT PART OF CODE)
