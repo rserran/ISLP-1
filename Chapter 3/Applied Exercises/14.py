@@ -411,3 +411,17 @@ Kurtosis:                       2.973   Cond. No.                         6.20
 Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ==============================================================================
+
+<x1x2correlation.png>
+<R4_1.png>
+<R4_2.png>
+<R4_3.png>
+<R4_4.png>
+<R5_1.png>
+<R5_2.png>
+<R5_3.png>
+<R5_4.png>
+<R6_1.png>
+<R6_2.png>
+<R6_3.png>
+<R6_4.png>
