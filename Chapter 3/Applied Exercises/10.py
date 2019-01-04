@@ -128,6 +128,8 @@ plt.title("Residuals vs Leverage - Residuals_2")
 fig = plt.gcf()
 fig.set_size_inches(11, 5)
 plt.show()
+
+# 10.h. Yes, there are high leverage points. Point 42 is one such example.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 RESULTS (NOT PART OF CODE)
 
@@ -223,3 +225,11 @@ Model#1 Root Mean Squared Error: 2.460119
 /anaconda3/lib/python3.6/site-packages/scipy/stats/stats.py:1713: FutureWarning:
 
 Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+
+<CarSeats - Residual Plot 1.png>
+<CarSeats - Residual Plot 2.png>
+<CarSeats - Residuals vs Fitted - Residuals_2.png>
+<CarSeats - Normal QQ - Plot - Residuals_2 - v1.png>
+<CarSeats - Normal QQ - Plot - Residuals_2 - v2.png>
+<CarSeats - Scale-Location Plot - Residuals_2.png>
+<CarSeats - Residuals vs Leverage - Residuals_2.png>
