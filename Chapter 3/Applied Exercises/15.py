@@ -976,3 +976,18 @@ strong multicollinearity or other numerical problems.
 
 ==============================================================================
 
+<crim.png>
+<zn.png>
+<indus.png>
+<chas.png>
+<nox.png>
+<rm.png>
+<age.png>
+<dis.png>
+<rad.png>
+<tax.png>
+<ptratio.png>
+<back.png>
+<lstat.png>
+<medv.png>
+<Boston Pairplot.png>
