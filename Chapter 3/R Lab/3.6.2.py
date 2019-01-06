@@ -21,7 +21,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # import dataset.
-Boston = pd.read_csv("/Users/arpanganguli/Documents/Finance : ML/ISLR/Datasets/Boston.csv", index_col = "Unnamed: 0")
+url = "/Users/arpanganguli/Documents/Finance/ISLR/Datasets/Boston.csv"
+Boston = pd.read_csv(url, index_col = "SlNo")
 """
 use the absolute path in your own computer like I have used in mine above
 """
