@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # set seed
-random.seed(1)
+np.random.seed(1)
 x= pd.DataFrame(np.random.normal(0, 1, 100))
 y = 2*x + pd.DataFrame(np.random.normal(0, 1, 100))
 
