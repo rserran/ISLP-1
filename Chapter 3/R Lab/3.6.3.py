@@ -18,8 +18,8 @@ import seaborn as sns
 from pandas.plotting import scatter_matrix
 
 # load and visualise data
-url = "/Users/arpanganguli/Documents/Finance : ML/ISLR/Datasets/Boston.csv"
-Boston = pd.read_csv(url, index_col = 'Unnamed: 0')
+url = "/Users/arpanganguli/Documents/Finance/ISLR/Datasets/Boston.csv"
+Boston = pd.read_csv(url, index_col = 'SlNo')
 print(Boston.head())
 scatter_matrix(Boston)
 plt.show()
