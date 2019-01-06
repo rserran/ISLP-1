@@ -16,9 +16,12 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# load data; visualisation same as Section 3.6.3
-url = "/Users/arpanganguli/Documents/Finance : ML/ISLR/Datasets/Boston.csv"
-Boston = pd.read_csv(url, index_col = 'Unnamed: 0')
+# load and visualise data
+url = "/Users/arpanganguli/Documents/Finance/ISLR/Datasets/Boston.csv"
+Boston = pd.read_csv(url, index_col = 'SlNo')
+print(Boston.head())
+scatter_matrix(Boston)
+plt.show()
 
 # perform regression
 Y = Boston['medv']
