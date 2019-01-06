@@ -15,6 +15,7 @@ from statsmodels.formula.api import ols
 import statsmodels.api as sm
 from sklearn.linear_model import LinearRegression
 from sklearn import datasets
+from statsmodels.stats.outliers_influence import summary_table
 
 # import data visualisation tools
 import matplotlib.pyplot as plt
