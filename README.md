@@ -15,7 +15,7 @@ This repository is divided into chapters. Each chapter is divided into two subfo
 ## Table of Contents
 1. [Chapter 3: Linear Regression](https://bit.ly/2VsS4cL)
 2. [Chapter 4: Classification](http://bit.ly/2H862gG)
-3. Chapter 5: Resampling Methods
+3. [Chapter 5: Resampling Methods](http://bit.ly/2RIQ4Ou)
 4. Chapter 6: Linear Model Selection and Regularization
 5. Chapter 7: Moving Beyod Linearity
 6. Chapter 8: Tree-Based Methods
