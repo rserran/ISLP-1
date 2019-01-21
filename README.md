@@ -24,3 +24,4 @@ This repository is divided into chapters. Each chapter is divided into two subfo
 
 ## Notes
 1. The codes start at Chapter 3 because the Chapter 1 contains no code and the Chapter 2 is a basic introduction to coding in R, which has simple translations in Python. However, in my opinion, Chapter 2 is perhaps the most important chapter in the book since it explains the most important concepts of statistical learning (such as bias-variance tradeoff) which apply to all of the book irrespective of the model you choose to apply.
+2. I have not solved Question 11 of Applied Exercises in Chapter 6. This is because the said question is a summary of all previous questions that follow and it would be personally quite time-consuming for me. That is not say that I will never solve it. I will return to it at a later date when I am little less occupied.
