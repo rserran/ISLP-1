@@ -13,7 +13,7 @@ This repository is divided into chapters. Each chapter is divided into two subfo
 2. **Applied Exercises:** This contains Python Codes from Applied Exercises from each chapter. The Applied Exercises will contain some sub-questions which ask the reader to interpret the model rather than code it. I will provide solutions to those questions for the sake of completeness.
 
 ## Table of Contents
-1. [Chapter 3: Linear Regression](https://bit.ly/2VsS4cL)
+[] [Chapter 3: Linear Regression](https://bit.ly/2VsS4cL)
 2. [Chapter 4: Classification](http://bit.ly/2H862gG)
 3. [Chapter 5: Resampling Methods](http://bit.ly/2RIQ4Ou)
 4. [Chapter 6: Linear Model Selection and Regularization](http://bit.ly/2FEiza8)
