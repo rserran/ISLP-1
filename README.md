@@ -13,7 +13,7 @@ This repository is divided into chapters. Each chapter is divided into two subfo
 2. **Applied Exercises:** This contains Python Codes from Applied Exercises from each chapter. The Applied Exercises will contain some sub-questions which ask the reader to interpret the model rather than code it. I will provide solutions to those questions for the sake of completeness.
 
 ## Table of Contents
-[] [Chapter 3: Linear Regression](https://bit.ly/2VsS4cL)
+1. [Chapter 3: Linear Regression](https://bit.ly/2VsS4cL)
 2. [Chapter 4: Classification](http://bit.ly/2H862gG)
 3. [Chapter 5: Resampling Methods](http://bit.ly/2RIQ4Ou)
 4. [Chapter 6: Linear Model Selection and Regularization](http://bit.ly/2FEiza8)
@@ -25,9 +25,6 @@ This repository is divided into chapters. Each chapter is divided into two subfo
 ## Notes
 1. The codes start at Chapter 3 because the Chapter 1 contains no code and the Chapter 2 is a basic introduction to coding in R, which has simple translations in Python. However, in my opinion, Chapter 2 is perhaps the most important chapter in the book since it explains the most important concepts of statistical learning (such as bias-variance tradeoff) which apply to all of the book irrespective of the model you choose to apply.
 2. Some issues in Chapter 6:
-  <br>
   a. I have not performed Best Subset Selection in Question 11.a. of Applied Exercises. This is because the said method is extremely time-consuming and I have provided the code for best subset selection in previous examples and exercises. This means that my answer for Question 11 overall will not include results from best subset selection. That is not say that I will never solve it. I will return to it at a later date when I am little less occupied.
-  <br>
   b. I have omitted R Lab 6.5.3: "Choosing Among Models Using the Validation Set Approach and Cross-Validation". I have covered similar code in the previous two R Labs, 6.5.1 and 6.5.2.
-  <br>
   c. I have not solved Question 10. This is because my computer is constantly hanging when performing best subset selection and I have wasted close to 4 hours in this pursuit. I will come back to this question later.
