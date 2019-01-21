@@ -21,6 +21,7 @@ This repository is divided into chapters. Each chapter is divided into two subfo
 6. Chapter 8: Tree-Based Methods
 7. Chapter 9: Support Vector Machines
 8. Chapter 10: Unsupervised Learning
+9. [Extra: Data](http://bit.ly/2MmkroK)
 
 ## Notes
 1. The codes start at Chapter 3 because the Chapter 1 contains no code and the Chapter 2 is a basic introduction to coding in R, which has simple translations in Python. However, in my opinion, Chapter 2 is perhaps the most important chapter in the book since it explains the most important concepts of statistical learning (such as bias-variance tradeoff) which apply to all of the book irrespective of the model you choose to apply.
