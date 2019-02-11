@@ -20,7 +20,7 @@ This repository is divided into chapters. Each chapter is divided into two subfo
 5. [Chapter 7: Moving Beyod Linearity](http://bit.ly/2CNtKK7)
 6. [Chapter 8: Tree-Based Methods](http://bit.ly/2sTm6Jm)
 7. [Chapter 9: Support Vector Machines](http://bit.ly/2sXz1Ko)
-8. Chapter 10: Unsupervised Learning
+8. [Chapter 10: Unsupervised Learning](http://bit.ly/2GlxkiJ)
 9. [Extra: Data](http://bit.ly/2MmkroK)
 
 ## Notes
