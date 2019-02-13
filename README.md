@@ -25,7 +25,7 @@ This repository is divided into chapters. Each chapter is divided into two subfo
 
 ## Notes
 1. I have used Python 3.6.6 for the purposes of programmming all codes in this book. You might want to check the Python version in your computer before applying my codes since syntaxes might differ. This is particularly applicable for those running Python 2.x.
-2. While reading a file in Python using `pd.read_csv(url)`, I use the location of files *in my computer* as the URL. The reader will need to use the location of files *in their computer* while reading those files in Python.
+2. While reading a file in Python using `pd.read_csv(url)`, I use the location of files *in my computer* as the URL. You will need to use the location of files *in your computer* while reading those files in Python.
 3. The book uses many data sets that are inbuilt in the ISLR library. I have uploaded them in the [Data](http://bit.ly/2MmkroK) folder.
 4. Since all codes in this repository have been typed in Jupyter Notebook, there will be a *slight* difference between the codes in the repository and if you use those codes in an IDE/Terminal. This difference will reflect during printing a result. As an example, what I type in as `df.head()` in this repository should be typed as `print(df.head())` in an IDE/Terminal.
 5. I ignore warnings using the `warnings.filterwarnings('ignore')` command for presentational aesthetics. That does not mean I ignore said warnings. I incorporate warnings and implement them (e.g. using `solver=` while performing logistic regression through `sklearn.linear_model.LogisticRegression` or using `test_size=` instead of `train_size=` while splitting the data set using `sklearn.model_selection.train_test_split()`) before igoring them.
