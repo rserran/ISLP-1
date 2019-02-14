@@ -2,7 +2,7 @@
 
 ## What is ISLP?
 
-[An Introduction to Statistical Learning with Applications in R](http://www-bcf.usc.edu/~gareth/ISL/) ("ISLR" for short) is a great practical introduction to machine learning. This repository is my personal attempt to "translate" the R Code in the book (contained in R Labs and Applied Exercises as well as some Conceptual Exercises) into Python. I have fancifully replaced the R in ISLR with P to reflect the change in language.
+[An Introduction to Statistical Learning with Applications in R](http://www-bcf.usc.edu/~gareth/ISL/) ("ISLR" for short) is a great practical introduction to machine learning. This repository is my personal attempt to "translate" the R Code in the book (contained in R Labs and Applied Exercises as well as some Conceptual Exercises) into Python. I have fancifully replaced the R in ISLR with P to reflect the change in programming language.
 
 The repository is built into different sections within the R Lab and Applied Exercises. I am not providing solutions to any Conceptual Exercises, but will provide the Python code for any answers in that section, if required. I will include any relevant concept or rationale as comments within the code.  
 
