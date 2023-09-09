@@ -1,0 +1,553 @@
+---
+title: "Chapter 3 - Applied Exercises"
+author: "Ricardo J. Serrano"
+format: 
+    html:
+        code-tools: true
+        self-contained: true
+editor: visual
+toc: true
+jupyter: islp
+---
+
+```{python}
+# import libraries
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+# from sklearn.linear_model import LinearRegression
+import scipy.stats as stats
+
+# import data visualisation tools
+import matplotlib.pyplot as plt
+import xkcd
+%matplotlib inline
+# from matplotlib import pylab
+# import plotly.plotly as py
+# import plotly.graph_objs as go
+import seaborn as sns
+plt.style.use('seaborn-v0_8-whitegrid')
+
+import warnings
+warnings.filterwarnings('ignore')
+
+plt.rcParams['figure.figsize'] = (12, 10)
+```
+
+# 3.8
+
+This question involves the use of simple linear regression on the `Auto` data set.
+
+Data dictionary
+
+`mpg` - miles per gallon
+
+`cylinders` - number of cylinders between 3 and 8
+
+`displacement` - engine displacement (cu. inches)
+
+`horsepower` - engine horsepower
+
+`weight` - vehicle weight (lbs.)
+
+`acceleration` - time to accelerate from 0 to 60 mph (sec.)
+
+`year` - model year (modulo 100)
+
+`origin` - vehicle origin (1. American, 2. European, 3. Japanese)
+
+`name` - vehicle name
+
+*Exploratory Data Analysis (EDA)*
+
+```{python}
+url = "../Data/Auto.csv"
+Auto = pd.read_csv(url)
+```
+
+First five rows `head()`
+
+```{python}
+Auto.head()
+```
+
+`Auto` dataset variable types
+
+```{python}
+Auto.info()
+```
+
+Verify missing values
+
+```{python}
+Auto.isnull().sum().sum()
+```
+
+No missing values!
+
+`Auto` descriptive statistics
+
+```{python}
+Auto.describe().T
+```
+
+`Auto` histograms (numerical variables)
+
+```{python}
+Auto.hist()
+```
+
+(a) Use the `sm.OLS()` function to perform a simple linear regression with `mpg` as the response and `horsepower` as the predictor. Use the `summary()` function to print the results. Comment on the output.
+
+```{python}
+y = Auto.mpg.astype(float)
+x = Auto.horsepower.astype(float)
+X = sm.add_constant(x)
+model = sm.OLS(y, X).fit()
+```
+
+Model summary
+
+```{python}
+model.summary()
+```
+
+
+i. Is there a relationship between the predictor and the response?
+
+Yes. The R-squared between `mpg` and `horsepower` is 0.604. This means that the regression model is able to explain at least 60.4% of the variability in `mpg` (page 79).
+
+Also, the F-statistic p-value is almost 0, which indicates that the linear regression model is significant (null hypothesis is model with intercept only).
+
+ii. How strong is the relationship between the predictor and the response?
+
+RSE (residual standard error)
+
+```{python}
+model.resid.std(ddof=X.shape[1])
+```
+
+Since the mean of `mpg` is 23.5158, the precentage error is approximately 21% (RSE / mean(mpg)).
+
+iii. Is the relationship between the predictor and the response positive or negative?
+
+```{python}
+values = slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
+
+print(f'Slope: {values[0]:.4f}')
+print(f'Intercept (constant): {values[1]:.4f}')
+print(f'R-value (Pearson coefficient): {values[2]:.4f}')
+print(f'R-squared (coefficient of determination): {values[2]**2:.4f}')
+print(f'p-value: {values[3]:.4f}')
+```
+
+Plot linear regression model
+
+```{python}
+plt.figure(figsize=(25, 10))
+plotdata = pd.concat([x, y], axis = 1)
+sns.lmplot(x = "horsepower", y = "mpg", data = plotdata)
+fig = plt.gcf()
+fig.set_size_inches(25, 10)
+plt.show()
+```
+
+Negative. An increase in `horsepower` is related to a decrease in `mpg`.
+
+iv. What is the predicted mpg associated with a horsepower of 98? What are the associated 95 % confidence and prediction intervals?
+
+```{python}
+# confidence interval/prediction confidence interval (statsmodels)
+new_data = np.array([1, 98])
+pred = model.get_prediction(new_data)
+pred.summary_frame(alpha = 0.05)
+```
+
+[Confidence and prediction intervals: What's the difference?](https://www.statology.org/confidence-interval-vs-prediction-interval/)
+
+(c) Produce some of diagnostic plots of the least squares regression fit as described in the lab. Comment on any problems you see with the fit.
+
+[Source: Regression tutorial](https://www.sfu.ca/~mjbrydon/tutorials/BAinPy/09_regression.html)
+
+Residuals histogram
+
+```{python}
+sns.histplot(model.resid)
+```
+
+Calculate the mean (mu) and standard deviation (std) for residuals distribution
+
+```{python}
+mu, std = stats.norm.fit(model.resid)
+print(mu, std)
+```
+
+Shapiro-Wilk noramlity test
+```{python}
+stats.shapiro(model.resid)
+```
+
+Residuals vs. Fitted Values
+
+[Source: From R to Python](https://towardsdatascience.com/going-from-r-to-python-linear-regression-diagnostic-plots-144d1c4aa5a)
+
+```{python}
+from statsmodels.nonparametric.smoothers_lowess import lowess
+
+# function to plot residuals vs. fitted values
+def resid_fitted_plot(model):
+
+    residuals = model.resid
+    fitted = model.fittedvalues
+    smoothed = lowess(residuals, fitted)
+    top3 = abs(residuals).sort_values(ascending = False)[:3]
+
+    plt.rcParams.update({'font.size': 16})
+    fig, ax = plt.subplots()
+    ax.scatter(fitted, residuals, edgecolors = 'k', facecolors = 'none')
+    ax.plot(smoothed[:,0],smoothed[:,1],color = 'r')
+    ax.set_ylabel('Residuals')
+    ax.set_xlabel('Fitted Values')
+    ax.set_title('Residuals vs. Fitted')
+    ax.plot([min(fitted), max(fitted)],[0,0],color = 'k',linestyle = ':', alpha = .3)
+
+    for i in top3.index:
+        ax.annotate(i, xy=(fitted[i],residuals[i]))
+
+    plt.show()
+
+resid_fitted_plot(model = model)
+```
+
+The plot clearly shows a non-linear relationship between the residuals and fitted values.
+
+Q-Q plot
+
+```{python}
+sm.qqplot(model.resid, line='s')
+plt.show()
+```
+
+Most of the residuals follow the 1:1 line, but the tail ends deviate from this line.
+
+Standardized residuals vs. Fitted Values (homoskedasticity test)
+
+```{python}
+# function to plot standardized residuals vs. fitted values
+def std_resid_fitted_plot(model):
+
+    student_residuals = model.get_influence().resid_studentized_internal
+    fitted = model.fittedvalues
+    sqrt_student_residuals = pd.Series(np.sqrt(np.abs(student_residuals)))
+    sqrt_student_residuals.index = model.resid.index
+    smoothed = lowess(sqrt_student_residuals, fitted)
+    top3 = abs(sqrt_student_residuals).sort_values(ascending = False)[:3]
+
+    fig, ax = plt.subplots()
+    ax.scatter(fitted, sqrt_student_residuals, edgecolors = 'k', facecolors = 'none')
+    ax.plot(smoothed[:,0],smoothed[:,1],color = 'r')
+    ax.set_ylabel('$\sqrt{|Studentized \ Residuals|}$')
+    ax.set_xlabel('Fitted Values')
+    ax.set_title('Scale-Location')
+    ax.set_ylim(0,max(sqrt_student_residuals)+0.1)
+    for i in top3.index:
+        ax.annotate(i,xy=(fitted[i],sqrt_student_residuals[i]))
+    plt.show()
+
+std_resid_fitted_plot(model = model)
+```
+
+The lowess smoother upward trend is indicative of heteroskedasticity.
+
+# 3.9
+
+Continue using the `Auto` dataset.
+
+(a) Produce a scatterplot matrix which includes all of the variables in the data set.
+
+```{python}
+sns.pairplot(Auto, palette='Dark2')
+```
+
+With hue = `origin`
+```{python}
+sns.pairplot(Auto, hue = 'origin', palette='Dark2')
+```
+
+(b) Compute the matrix of correlations between the variables using the `DataFrame.corr()` method.
+
+```{python}
+Auto.corr()
+```
+
+Correlation heatmap
+
+```{python}
+sns.heatmap(Auto.corr(), vmin=-1, vmax=1, annot=True, cmap='BrBG')
+```
+
+(c) Use the `sm.OLS()` function to perform a multiple linear regression with `mpg` as the response and all other variables except name as the predictors. Use the `summary()` function to print the results.
+
+```{python}
+# X = Auto[['cylinders', 'displacement', 'horsepower', 'weight',
+#        'acceleration', 'year', 'origin']]
+# Y = Auto['mpg']
+# X1 = sm.add_constant(X)
+# reg = sm.OLS(Y, X1).fit()
+```
+
+```{python}
+# `cylinders` and `origin` are categorical variables
+reg = ols('mpg ~ C(cylinders) + displacement + horsepower + weight + acceleration + year + C(origin)', data = Auto).fit()
+```
+
+Model summary
+
+```{python}
+reg.summary()
+```
+
+Comments:
+
+1.  The model R-squared is 0.847, higher than the simple linear regression model studied in 3.8.
+2.  All variables are statistically signficant (i.e., p-values < 0.05), except `acceleration`.
+3.  Some model variables have strong multicollinearity.
+
+i. Is there a relationship between the predictors and the response? Use the `anova_lm()` function from `statsmodels` to answer this question.
+
+```{python}
+sm.stats.anova_lm(reg, typ = 2)
+```
+
+ii. Which predictors appear to have a statistically significant relationship to the response?
+
+The `anova` table reaffirms the conclusion that the predictors relationship to the response `mpg` is statistically significant, except `acceleration`.
+
+iii. What does the coefficient for the year variable suggest?
+
+Since the `year` coefficient is positive (0.7451), an increase in `year` also means an increase in `mpg` (~0.75 mpg/year).
+
+(d) Produce some of diagnostic plots of the linear regression fit as described in the lab. Comment on any problems you see with the fit. Do the residual plots suggest any unusually large outliers? Does the leverage plot identify any observations with unusually high leverage?
+
+Residuals vs. Fitted Values
+
+```{python}
+resid_fitted_plot(model = reg)
+```
+
+The plot shows a non-linear relationship between the residuals and fitted values.
+
+Q-Q plot
+
+```{python}
+sm.qqplot(reg.resid, line='s')
+plt.show()
+```
+
+Most of the residuals follow the 1:1 line, but the tail ends deviate from this line.
+
+Standardized residuals vs. Fitted Values (homoskedasticity test)
+
+```{python}
+std_resid_fitted_plot(model = reg)
+```
+
+The lowess smoother upward trend is indicative of heteroskedasticity.
+
+(e) Fit some models with interactions as described in the lab. Do any interactions appear to be statistically significant?
+
+Let's try interaction between `cylinders` and `displacement`
+
+```{python}
+reg_1 = ols('mpg ~ C(cylinders) + displacement + horsepower + weight + acceleration + year + C(origin) + C(cylinders) * displacement', data = Auto).fit()
+```
+
+Model summary (reg_1)
+```{python}
+reg_1.summary()
+```
+
+The interaction between `cylinders` and `displacement` does not appear to be statistically significant (i.e., p-values > 0.05)
+
+Let's try interaction between `weight` and `displacement`
+
+```{python}
+reg_2 = ols('mpg ~ C(cylinders) + displacement + horsepower + weight + acceleration + year + C(origin) + weight * displacement', data = Auto).fit()
+```
+
+Model summary (reg_2)
+```{python}
+reg_2.summary()
+```
+
+The interaction between `weight` and `displacement` is statistically significant, and improves the R-squared metric.
+
+(f) Try a few different transformations of the variables, such as log(X), √X, X2. Comment on your findings.
+
+Log transform `horsepower`
+Square root `acceleration`
+
+```{python}
+reg_3 = ols('mpg ~ C(cylinders) + displacement + horsepower + weight + acceleration + year + C(origin) + np.log(horsepower) + np.sqrt(acceleration)', data = Auto).fit()
+```
+
+Model summary (reg_3)
+```{python}
+reg_3.summary()
+```
+
+The log(`horsepower`) is still statistically significant.
+The sqrt(`acceleration`) remains not tatistically significant.
+
+# 3.10
+
+This question should be answered using the `Carseats` data set.
+
+Data dictionary
+
+A data frame with 400 observations on the following 11 variables.
+
+
+`Sales` - Unit sales (in thousands) at each location
+
+`CompPrice` - Price charged by competitor at each location
+
+`Income` - Community income level (in thousands of dollars)
+
+`Advertising` - Local advertising budget for company at each location (in thousands of dollars)
+
+`Population` - Population size in region (in thousands)
+
+`Price` - Price company charges for car seats at each site
+
+`ShelveLoc` - A factor with levels Bad, Good and Medium indicating the quality of the shelving location for the car seats at each site
+
+`Age` - Average age of the local population
+
+`Education` - Education level at each location
+
+`Urban` - A factor with levels No and Yes to indicate whether the store is in an urban or rural location
+
+`US` - A factor with levels No and Yes to indicate whether the store is in the US or not
+
+*Exploratory Data Analysis (EDA)*
+
+```{python}
+file = "../Data/Carseats.csv"
+CarSeats = pd.read_csv(file)
+```
+
+First five rows `head()`
+
+```{python}
+CarSeats.head()
+```
+
+`CarSeats` dataset variable types
+
+```{python}
+CarSeats.info()
+```
+
+Verify missing values
+
+```{python}
+CarSeats.isnull().sum().sum()
+```
+
+No missing values!
+
+`CarSeats` descriptive statistics
+
+```{python}
+CarSeats.describe().T
+```
+
+`CarSeats` histograms (numerical variables)
+
+```{python}
+CarSeats.hist()
+```
+
+(a) Fit a multiple regression model to predict `Sales` using `Price`, `Urban`, and `US`.
+
+```{python}
+reg = ols(formula = 'Sales ~ Price + C(Urban) + C(US)', data = CarSeats).fit() # C prepares categorical data for regression
+```
+
+Model summary
+
+```{python}
+reg.summary()
+```
+
+(b) Provide an interpretation of each coefficient in the model. Be
+careful—some of the variables in the model are qualitative!
+
+For a unit increase of price *ceterus paribus*, the sales decrease by 0.0545 units. Likewise, for a unit increase in an urban setting
+*ceterus paribus* the sales decrease by 0.219 units. Likewise, for a location in the US a unit increase of another store *ceterus paribus* 
+increases the sales by 1.2006 units.
+
+(c) Write out the model in equation form, being careful to handle the qualitative variables properly.
+
+$\hat{y} = 13.0435 + (-0.0219 \times Urban) + (1.2006 \times US) + (-0.0545 \times Price)$
+
+Where Urban and US are encoded as dummy variables:
+
+- Urban: Yes => 1
+- Urban:No   => 0
+- US: Yes    => 1
+- US: No     => 0
+
+(d) For which of the predictors can you reject the null hypothesis $H_0$ : $β_j$ = 0?
+
+We can reject "Urban" predictor, given it's high p-value(0.936).
+
+(e) On the basis of your response to the previous question, fit a smaller model that only uses the predictors for which there is evidence of association with the outcome.
+
+```{python}
+reg_1 = ols(formula = 'Sales ~ Price + C(US)', data = CarSeats).fit()
+```
+
+Model summary (reg_1)
+
+```{python}
+reg_1.summary()
+```
+
+(f) How well do the models in (a) and (e) fit the data?
+
+Considering the R-squared and adjusted R-squared parameters, both models have a similar precentage of explaining the variation on the response variable (`Sales`). However, the (e) model has less predictors and achieves the same performance as (a). Therefore, the (e) model is a more efficient model than (a).
+
+(g) Using the model from (e), obtain 95% confidence intervals for the coefficient(s).
+
+From the model summary table:
+
+Intercept: (11.790, 14.271)
+US: (0.692, 1.708)
+Price: (-0.065, -0.044)
+
+(h) Is there evidence of outliers or high leverage observations in the model from (e)?
+
+Residuals vs. Fitted Values
+
+```{python}
+resid_fitted_plot(model = reg_1)
+```
+
+Potential outliers: observations 50, 68 and 376.
+
+Residuals vs. Leverage plot
+
+```{python}
+fig = plt.figure(figsize = (25, 15))
+fig.set_size_inches(30, fig.get_figheight(), forward=True)
+sm.graphics.influence_plot(reg_1, criterion="cooks", size = 0.0002**2)
+plt.title("Residuals vs. Leverage")
+fig = plt.gcf()
+fig.set_size_inches(25, 15)
+plt.show()
+```
+
+Observation 42 is a high leverage point.
