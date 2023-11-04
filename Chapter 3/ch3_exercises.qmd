@@ -11,6 +11,9 @@ jupyter: islp
 ---
 
 ```{python}
+#| fig-align: center
+#| fig-width: 8
+
 # import libraries
 import numpy as np
 import pandas as pd
@@ -32,7 +35,7 @@ plt.style.use('seaborn-v0_8-whitegrid')
 import warnings
 warnings.filterwarnings('ignore')
 
-plt.rcParams['figure.figsize'] = (12, 10)
+plt.rcParams['figure.figsize'] = (10, 8)
 ```
 
 # 3.8
@@ -145,11 +148,11 @@ print(f'p-value: {values[3]:.4f}')
 Plot linear regression model
 
 ```{python}
-plt.figure(figsize=(25, 10))
+plt.figure(figsize=(16, 8))
 plotdata = pd.concat([x, y], axis = 1)
 sns.lmplot(x = "horsepower", y = "mpg", data = plotdata)
 fig = plt.gcf()
-fig.set_size_inches(25, 10)
+fig.set_size_inches(16, 8)
 plt.show()
 ```
 
@@ -267,6 +270,7 @@ Continue using the `Auto` dataset.
 (a) Produce a scatterplot matrix which includes all of the variables in the data set.
 
 ```{python}
+plt.figure(figsize=(10, 6))
 sns.pairplot(Auto, palette='Dark2')
 ```
 
@@ -285,6 +289,27 @@ Correlation heatmap
 
 ```{python}
 sns.heatmap(Auto.corr(), vmin=-1, vmax=1, annot=True, cmap='BrBG')
+```
+
+Pearson correlation p-values
+```{python}
+# Source: https://www.statology.org/p-value-correlation-pandas/
+#create function to calculate p-values for each pairwise correlation coefficient
+from scipy.stats import pearsonr
+
+Auto_num = Auto.drop('name', axis = 1)
+
+def r_pvalues(df):
+    cols = pd.DataFrame(columns=df.columns)
+    p = cols.transpose().join(cols, how='outer')
+    for r in df.columns:
+        for c in df.columns:
+            tmp = df[df[r].notnull() & df[c].notnull()]
+            p[r][c] = round(pearsonr(tmp[r], tmp[c])[1], 4)
+    return p
+
+#use custom function to calculate p-values
+r_pvalues(Auto_num)
 ```
 
 (c) Use the `sm.OLS()` function to perform a multiple linear regression with `mpg` as the response and all other variables except name as the predictors. Use the `summary()` function to print the results.
@@ -398,7 +423,7 @@ reg_3.summary()
 ```
 
 The log(`horsepower`) is still statistically significant.
-The sqrt(`acceleration`) remains not tatistically significant.
+The sqrt(`acceleration`) remains not statistically significant.
 
 # 3.10
 

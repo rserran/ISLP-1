@@ -1,0 +1,345 @@
+---
+title: "ISLR Chapter 8 Applied Exercise 9"
+author: "Taylor Dunn"
+date: "October 29, 2023"
+format:
+  html:
+    theme: sandstone
+    toc: true
+editor_options: 
+  chunk_output_type: console
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup}
+#| include: false
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE,
+                      message = FALSE, dpi = 180, 
+                      fig.width = 8, fig.height = 5)
+
+suppressMessages(library(tidyverse))
+suppressMessages(library(tidymodels))
+theme_set(theme_bw())
+```
+
+# ISLR Applied Exercises
+
+## Exercise 9
+
+In this exercise, we will predict the number of applications received
+using the other variables in the `College` data set.
+
+This dataset was taken from the StatLib library which is maintained at
+Carnegie Mellon University. The dataset was used in the ASA Statistical
+Graphics Section's 1995 Data Analysis Exposition.
+
+[Source](https://rdrr.io/cran/ISLR/man/College.html)
+
+### EDA
+
+Read the dataset.
+
+```{r 9-read-dataset}
+college_df <- read_csv('./Data/College.csv') %>% 
+     select(-1) %>% 
+     janitor::clean_names() %>% 
+     mutate(private = private %>% as.factor)
+
+college_df
+```
+
+Skim the dataset.
+
+```{r 9-skim}
+skimr::skim(college_df)
+```
+
+Read `college_variable_skew_vec.rds`
+```{r 9-read-rds-file}
+college_variable_skew_vec <- read_rds('./Data/college_variable_skew_vec.rds')
+```
+
+### (a) Split the data set into a training set and a test set.
+
+Source:
+https://bookdown.org/taylordunn/islr-tidy-1655226885741/linear-model-selection-and-regularization.html#exercises-3
+
+Create a `train` dataset from 70% of the observations.
+
+```{r 9-split-dataset}
+set.seed(4912)
+college_split <- initial_split(college_df %>% 
+                                    
+                                    # drop 'enroll', 'f_undergrad' high VIF
+                                    select(-enroll, -f_undergrad), 
+                               prop = 0.7)
+
+college_train <- training(college_split)
+college_test <- testing(college_split)
+```
+
+### (b) Fit a linear model using least squares on the training set, and report the test error obtained.
+
+```{r 9-ols-model}
+lm_spec <- linear_reg()
+
+college_lm_fit <- lm_spec %>%
+  fit(apps ~ ., data = college_train)
+
+bind_rows(
+  training = augment(college_lm_fit, new_data = college_train) %>%
+    rmse(apps, .pred),
+  testing = augment(college_lm_fit, new_data = college_test) %>%
+    rmse(apps, .pred),
+  .id = "data_set"
+)
+```
+
+### (c) Fit a ridge regression model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained.
+
+```{r 9-ridge-reg}
+college_recipe <- recipe(apps ~ ., data = college_train) %>%
+     # step_novel(all_nominal_predictors()) %>%
+     # step_mutate(private = private %>% as.numeric) %>% 
+     
+     step_interact(terms = ~ all_numeric_predictors():starts_with('private')) %>% 
+     step_dummy(all_nominal_predictors()) %>% 
+     step_zv(all_predictors()) %>%
+     step_normalize(all_predictors())
+
+ridge_spec <- linear_reg(
+     penalty = tune(), 
+     mixture = 0) %>%
+     set_engine("glmnet")
+
+college_ridge_workflow <- workflow() %>%
+     add_recipe(college_recipe) %>%
+     add_model(ridge_spec)
+
+college_resamples <- vfold_cv(college_train, v = 5)
+
+lambda_grid <- grid_regular(penalty(range = c(-4, 3)), levels = 100)
+
+college_ridge_tune <- tune_grid(
+     college_ridge_workflow,
+     resamples = college_resamples, 
+     grid = lambda_grid, 
+     control = control_grid(save_pred = TRUE)
+)
+```
+
+Finalize workflow with tuned hyperparameters
+
+```{r 9-final-ridge}
+college_ridge_workflow_final <- finalize_workflow(
+     college_ridge_workflow,
+     select_best(college_ridge_tune, metric = "rmse")
+)
+
+college_ridge_last_fit <- last_fit(college_ridge_workflow_final, college_split)
+
+college_ridge_last_fit %>%
+     collect_metrics()
+```
+
+
+The `tune::last_fit()` function I used above a nice shortcut to fitting
+the final model to the full training data and then evaluating it on the
+test set. Here's the `fit()` and `augment()` way:
+
+```{r 9-fit-augment}
+fit(college_ridge_workflow_final, data = college_train) %>%
+     augment(new_data = college_test) %>% 
+     rmse(apps, .pred)
+```
+
+Plot observed vs. predictions
+```{r 9-plot-observed-prediction}
+fit(college_ridge_workflow_final, data = college_train) %>%
+     augment(new_data = college_test) %>% 
+     ggplot(aes(apps, .pred)) + 
+     geom_point() + 
+     geom_abline(color = 'steelblue')
+```
+
+
+### (d) Fit a lasso model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+
+```{r 9-lasso-reg}
+lasso_spec <- linear_reg(
+     penalty = tune(), 
+     mixture = 1) %>%
+     set_engine("glmnet")
+
+college_lasso_workflow <- workflow() %>%
+     add_recipe(college_recipe) %>%
+     add_model(lasso_spec)
+
+college_lasso_tune <- tune_grid(
+     college_lasso_workflow,
+     resamples = college_resamples,
+     grid = lambda_grid
+)
+
+college_lasso_workflow_final <- finalize_workflow(
+     college_lasso_workflow,
+     select_best(college_lasso_tune, metric = "rmse")
+)
+college_lasso_last_fit <- last_fit(
+     college_lasso_workflow_final, 
+     split = college_split
+)
+
+college_lasso_last_fit %>% 
+     collect_metrics()
+```
+
+The lasso model performed slightly better than least squares, but worse than ridge.
+
+### (e) Fit a `PCR` (Principal Componenets Regression) model on the training set, with $M$ chosen by cross- validation. Report the test error obtained, along with the value of $M$ selected by cross-validation.
+
+```{r 9-pcr}
+library(mixOmics)
+
+college_pcr_recipe <- recipe(apps ~ ., data = college_train) %>%
+     # step_novel(all_nominal_predictors()) %>%
+     # step_mutate(private = private %>% as.numeric) %>% 
+     
+     step_interact(terms = ~ all_numeric_predictors():starts_with('private')) %>% 
+     step_dummy(all_nominal_predictors()) %>% 
+     step_zv(all_predictors()) %>%
+     step_normalize(all_predictors()) %>% 
+     step_pca(all_predictors(), num_comp = parsnip::tune())
+
+college_pcr_workflow <- workflow() %>%
+     add_model(lm_spec) %>%
+     add_recipe(college_pcr_recipe)
+
+num_comp_grid <- grid_regular(num_comp(range = c(1, 17)), levels = 17)
+
+college_pcr_tune <- tune_grid(
+     college_pcr_workflow, resamples = college_resamples,
+     grid = num_comp_grid
+)
+
+autoplot(college_pcr_tune) +
+     geom_point(
+          data = . %>%
+               group_by(.metric) %>%
+               filter(
+                    (.metric == "rmse" & mean == min(mean)) |
+                         (.metric == "rsq") & mean == max(mean)
+               ),
+          color = "red", size = 3
+     )
+```
+
+The best performing model is for $M$ = 17 components, i.e. no dimensionality reduction since p = 17. This should return the exact same model as the least squares in part (b):
+
+```{r 9-pcr-last-fit}
+college_pcr_workflow_final <- finalize_workflow(
+     college_pcr_workflow,
+     select_best(college_pcr_tune, metric = "rmse")
+)
+college_pcr_last_fit <- last_fit(
+     college_pcr_workflow_final, college_split
+)
+
+college_pcr_last_fit %>% 
+     collect_metrics()
+```
+
+The `PCR` RMSE metric is equal to the `ols` linear model.
+
+### (f) Fit a `PLS` (Partial Least Squares Regression) model on the training set, with $M$ chosen by cross- validation. Report the test error obtained, along with the value of $M$ selected by cross-validation.
+
+```{r 9-pls}
+college_pls_recipe <- recipe(apps ~ ., data = college_train) %>%
+     # step_novel(all_nominal_predictors()) %>%
+     # step_mutate(private = private %>% as.numeric) %>% 
+     
+     step_interact(terms = ~ all_numeric_predictors():starts_with('private')) %>% 
+     step_dummy(all_nominal_predictors()) %>% 
+     step_zv(all_predictors()) %>%
+     step_normalize(all_predictors()) %>% 
+     step_pls(all_predictors(), outcome = "apps", num_comp = parsnip::tune())
+
+college_pls_workflow <- workflow() %>%
+     add_model(lm_spec) %>%
+     add_recipe(college_pls_recipe)
+
+college_pls_tune <- tune_grid(
+     college_pls_workflow, resamples = college_resamples,
+     grid = num_comp_grid
+)
+
+autoplot(college_pls_tune) +
+     geom_point(
+          data = . %>%
+               group_by(.metric) %>%
+               filter(
+                    (.metric == "rmse" & mean == min(mean)) |
+                         (.metric == "rsq") & mean == max(mean)
+               ),
+          color = "red", size = 3
+     )
+```
+
+The `RMSE` metric results in $M$ = 17, while the maximum $R^2$ points to $M$ = 12. 
+
+```{r 9-pls-last-fit}
+college_pls_workflow_final <- finalize_workflow(
+     college_pls_workflow,
+     select_best(college_pls_tune, metric = "rmse")
+)
+college_pls_last_fit <- last_fit(
+     college_pls_workflow_final, college_split
+)
+college_pls_last_fit %>% 
+     collect_metrics()
+```
+
+### (g) Comment on the results obtained. How accurately can we predict the number of college applications received? Is there much difference among the test errors resulting from these five approaches?
+
+```{r 9-metrics-table}
+library(gt)
+
+model_rmse <- bind_rows(
+     lm = augment(college_lm_fit, new_data = college_test) %>%
+          rmse(truth = apps, estimate = .pred),
+     ridge = collect_metrics(college_ridge_last_fit),
+     lasso = collect_metrics(college_lasso_last_fit),
+     pcr = collect_metrics(college_pcr_last_fit),
+     pls = collect_metrics(college_pls_last_fit),
+     .id = "model"
+) %>%
+     filter(.metric == "rmse") %>% 
+     dplyr::select(model, RMSE = .estimate) %>% 
+     arrange(RMSE)
+
+gt(model_rmse) %>%
+     fmt_number(RMSE, decimals = 1)
+```
+
+The ridge regularized regression is the model with the minimum RMSE.
+
+```{r 9-plot-observed-predicted}
+bind_rows(
+     lm = augment(college_lm_fit, college_test),
+     ridge = collect_predictions(college_ridge_last_fit),
+     lasso = collect_predictions(college_lasso_last_fit),
+     pcr = collect_predictions(college_pcr_last_fit),
+     pls = collect_predictions(college_pls_last_fit),
+     .id = "model"
+) %>%
+     mutate(model = factor(model, c("lm", "ridge", "lasso", "pcr", "pls"))) %>%
+     ggplot(aes(x = apps, y = .pred)) +
+     geom_point() +
+     geom_abline(slope = 1, intercept = 0,
+                 lty = 2, color = 'steelblue') +
+     facet_wrap(~ model, nrow = 2)
+     # add_facet_borders()
+```

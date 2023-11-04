@@ -1,0 +1,313 @@
+---
+title: "ISLR Chapter 6 Applied Exercises Solutions"
+author: "Swapnil Sharma"
+date: "July 28, 2017"
+format:
+  html:
+    theme: sandstone
+    toc: true
+editor_options: 
+  chunk_output_type: console
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup}
+#| include: false
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE,
+                      message = FALSE, dpi = 180, 
+                      fig.width = 8, fig.height = 5)
+
+suppressMessages(library(tidyverse))
+library(leaps)
+library(olsrr)
+theme_set(theme_bw())
+```
+
+# ISLR Applied Exercises
+
+## Exercise 8
+
+In this exercise, we will generate simulated data, and will then use
+this data to perform forward and backward stepwise selection.
+
+### (a)
+
+Create a random number generator and use its `normal()` method to
+generate a predictor $X$ of length $n$ = 100, as well as a noise vector
+$\epsilon$ of length $n$ = 100.
+
+```{r random-numbers}
+set.seed(10)
+x = rnorm(100)
+epsilon = rnorm(100)
+```
+
+### (b)
+
+Generate a response vector $Y$ of length $n$ = 100 according to the
+model\
+$Y$ = $\beta_0$ + $\beta_1$ $X$ + $\beta_2$ $X^2$ + $\beta_3$ $X^3$ +
+$\epsilon$
+
+```{r model}
+b0 <- 2
+b1 <- 3
+b2 <- (-4)
+b3 <- 0.5
+
+y <- b0 + b1*x + b2 * x^2 + b3 * x^3 + epsilon
+```
+
+### (c)
+
+Use the `regsubsets()` function to perform best subset selection in
+order to choose the best model containing the predictors $X$ , $X^2$, .
+. ., $X^10$. What is the best model obtained according to $C_p$, $BIC$,
+and adjusted $R^2$ ? Show some plots to provide evidence for your
+answer, and report the coefficients of the best model obtained. Note you
+will need to use the `data.frame()` function to create a single data set
+containing both $X$ and $Y$ .
+
+```{r feature-selection}
+# create data.full dataframe
+data.full <- data.frame(y=y,x=x)
+data.full
+
+regfit.full <- regsubsets(y~x+I(x^2) + I(x^3) + I(x^4) + I(x^5) + I(x^6) + I(x^7) + I(x^8) + I(x^9) + I(x^10), data = data.full, nvmax = 100, really.big = T)
+
+reg.summary <- summary(regfit.full)
+reg.summary
+
+par(mfrow=c(1,3))
+
+# plot model c_p value for different number of variables.Least value of c_p gives best model
+plot(reg.summary$cp,xlab="Number of Variables", ylab="C_p", type="l")
+points(which.min(reg.summary$cp), reg.summary$cp[which.min(reg.summary$cp)], 
+       col="blue", cex=2, pch=20)
+
+#plot model BIC value
+plot(reg.summary$bic, xlab="Number of Variables", ylab="BIC",type="l")
+points(which.min(reg.summary$bic), reg.summary$bic[which.min(reg.summary$bic)], 
+       col="blue", cex=2, pch=20)
+
+# plot model adjusted R-square. Higher adjusted R-square gives best model
+plot(reg.summary$adjr2, xlab="Number of Variables", ylab="Adj R^2",type="l")
+points(which.max(reg.summary$adjr2), reg.summary$adjr2[which.max(reg.summary$adjr2)], 
+       col="blue", cex=2, pch=20)
+```
+
+Adjusted $R^2$ coefficients
+
+```{r model-coef}
+coef(regfit.full, which.max(reg.summary$adjr2))
+```
+
+The plots show that the best subset method results in a model of 3
+predictors:
+
+$Y$ = 1.9289736 + 2.8842119 \* $X$ - 4.0363781 \* $X^2$ + 0.5211132 \*
+$X^3$
+
+Using `olsrr` package for variable selection
+
+```{r variable-selection}
+model <- lm(y ~ x + I(x^2) + I(x^3) + I(x^4) + I(x^5) + I(x^6) + I(x^7) + I(x^8) + I(x^9) + I(x^10), data = data.full)
+
+k <- ols_step_all_possible(model)
+plot(k)
+```
+
+Best subset regresion
+
+```{r ols-best-subset}
+best_subset <- ols_step_best_subset(model)
+plot(best_subset)
+```
+
+### (d)
+
+Repeat (c), using forward stepwise selection and also using backwards
+stepwise selection. How does your answer compare to the results in (c)?
+
+#### Forward selection
+
+```{r forward-selection}
+regfit.fwd <- regsubsets(y~x+I(x^2) + I(x^3) + I(x^4) + I(x^5) + I(x^6) + I(x^7) + I(x^8) + I(x^9) + I(x^10), data = data.full, nvmax = 10, really.big = T, method = "forward")
+
+reg.summary.fwd <- summary(regfit.fwd)
+reg.summary.fwd
+
+par(mfrow=c(1,3))
+
+# plot model c_p value for different number of variables.Least value of c_p gives best model
+plot(reg.summary.fwd$cp, xlab="Number of Variables", ylab="C_p", type="l")
+points(which.min(reg.summary.fwd$cp), reg.summary.fwd$cp[which.min(reg.summary.fwd$cp)], col="blue", cex=2, pch=20)
+
+# plot model BIC value
+plot(reg.summary.fwd$bic, xlab="Number of Variables", ylab="BIC",type="l")
+points(which.min(reg.summary.fwd$bic), reg.summary.fwd$bic[which.min(reg.summary.fwd$bic)], col="blue", cex=2, pch=20)
+
+# plot model adj R square. HIgher adj r sqaure gives best model
+plot(reg.summary.fwd$adjr2, xlab="Number of Variables", ylab="Adj R^2",type="l")
+points(which.max(reg.summary.fwd$adjr2), reg.summary.fwd$adjr2[which.max(reg.summary.fwd$adjr2)], col="blue", cex=2, pch=20)
+```
+
+Adjusted $R^2$ coefficients
+
+```{r fwd-model-coef}
+coef(regfit.fwd, which.max(reg.summary.fwd$adjr2))
+```
+
+The forward selection results are the same as the best subset in (c).
+
+#### Backward selection
+
+```{r backward-selection}
+regfit.bwd <- regsubsets(y~x+I(x^2) + I(x^3) + I(x^4) + I(x^5) + I(x^6) + I(x^7) + I(x^8) + I(x^9) + I(x^10), data = data.full, nvmax = 10, really.big = T, method = "backward")
+
+reg.summary.bwd <- summary(regfit.bwd)
+reg.summary.bwd
+
+par(mfrow=c(1,3))
+
+# plot model c_p value for different number of variables.Least value of c_p gives best model
+plot(reg.summary.bwd$cp, xlab="Number of Variables", ylab="C_p",type="l")
+points(which.min(reg.summary.bwd$cp), reg.summary.bwd$cp[which.min(reg.summary.bwd$cp)], col="blue", cex=2, pch=20)
+
+# plot model BIC value
+plot(reg.summary.bwd$bic, xlab="Number of Variables", ylab="BIC",type="l")
+points(which.min(reg.summary.bwd$bic), reg.summary.bwd$bic[which.min(reg.summary.bwd$bic)], col="blue", cex=2, pch=20)
+
+# plot model adj R square. HIgher adj r sqaure gives best model
+plot(reg.summary.bwd$adjr2, xlab="Number of Variables", ylab="Adj R^2",type="l")
+points(which.max(reg.summary.bwd$adjr2), reg.summary.bwd$adjr2[which.max(reg.summary.bwd$adjr2)], col="blue", cex=2, pch=20)
+```
+
+Adjusted $R^2$ coefficients
+
+```{r nwd-model-coef}
+coef(regfit.bwd, which.max(reg.summary.bwd$adjr2))
+```
+
+The backward selection has more features selected (5 predictors) than
+the best subset method and the forward selection.
+
+$Y$ = 1.94945621 + 2.95540112 \* $X$ - 4.0678969 \* $X^2$ + 0.64656026
+\* $X^5$ - 0.25355225 $X^7$ + 0.02951359 $X^9$
+
+### (e)
+
+Fit a lasso model to the simulated data. Use cross-validation to select
+the optimal value of $\lambda$. Create plots of the cross-validation
+error as a function of $\lambda$. Report the resulting coefficient
+estimates, and discuss the results obtained.
+
+#### Best subset model
+
+```{r lasso-model}
+library(glmnet)
+set.seed(1)
+
+xmat <- model.matrix(y ~ x + I(x^2) + I(x^3) + I(x^4) + I(x^5) + I(x^6) + I(x^7) + I(x^8) + I(x^9) + I(x^10), data = data.full)[, -1]
+
+set.seed(1)
+cv.lasso<-cv.glmnet(xmat, y, alpha = 1)
+
+par(mfrow=c(1, 1))
+plot(cv.lasso)
+```
+
+Optimal value of $\lambda$
+
+```{r opt-lambda}
+bestlam <- cv.lasso$lambda.min
+bestlam
+```
+
+Fit lasso model with optimal value of $\lambda$
+
+```{r lasso-opt-lambda}
+fit.lasso<-glmnet(xmat, y, alpha=1)
+predict(fit.lasso, s=bestlam, type="coefficients")[1:11,]
+```
+
+After performing cross validation we get an optiam value of $\lambda$ =
+0.05501197 for minimum MSE.
+
+The lasso model coefficients are:
+
+$Y$ = 1.8854553 + 2.8607547 \* $X$ - 3.9955603 \* $X^2$ + 0.5100468 \*
+$X^3$
+
+### (f)
+
+Now generate a response vector $Y$ according to the model
+
+$Y$ = $\beta_0$ + $\beta_7$ $X^7$ + $\epsilon$
+
+```{r new-lasso-model}
+b7 <- 7
+
+y <- b0 + b7 * x^7 + epsilon
+
+data.full <- data.frame(y = y, x = x)
+
+regfit.full <- regsubsets(y ~ x + I(x^2) + I(x^3) + I(x^4) + I(x^5) + I(x^6) + I(x^7) + I(x^8) + I(x^9) + I(x^10), data = data.full, nvmax = 100)
+
+reg.summary <- summary(regfit.full)
+reg.summary
+
+par(mfrow = c(1, 3))
+plot(reg.summary$cp, xlab = "Number of variables", ylab = "C_p", type = "l")
+points(which.min(reg.summary$cp), reg.summary$cp[which.min(reg.summary$cp)], col = "red", cex = 2, pch = 20)
+
+plot(reg.summary$bic, xlab = "Number of variables", ylab = "BIC", type = "l")
+points(which.min(reg.summary$bic), reg.summary$bic[which.min(reg.summary$bic)], col = "red", cex = 2, pch = 20)
+
+plot(reg.summary$adjr2, xlab = "Number of variables", ylab = "Adjusted R^2", type = "l")
+points(which.max(reg.summary$adjr2), reg.summary$adjr2[which.max(reg.summary$adjr2)], col = "red", cex = 2, pch = 20)
+```
+
+```{r new-lasso-coef}
+coef(regfit.full, 2)
+```
+
+```{r new-lasso-coef-1}
+coef(regfit.full, 1)
+```
+
+```{r new-lasso-coef-4}
+coef(regfit.full, 4)
+```
+
+We see $C_p$ chooses a 2-variable model, BIC chooses 1-variable model
+while adjusted $R^2$ chooses 4-variable model.
+
+#### Lasso model
+
+```{r new-lasso}
+xmat <- model.matrix(y ~ x + I(x^2) + I(x^3) + I(x^4) + I(x^5) + I(x^6) + I(x^7) + I(x^8) + I(x^9) + I(x^10), data = data.full)[, -1]
+
+set.seed(1)
+cv.lasso <- cv.glmnet(xmat, y, alpha = 1)
+
+bestlam <- cv.lasso$lambda.min
+bestlam
+```
+
+Fit lasso model with new optimal value of $\lambda$.
+
+```{r new-lasso-final}
+fit.lasso <- glmnet(xmat, y, alpha = 1)
+
+predict(fit.lasso, s = bestlam, type = "coefficients")[1:11, ]
+```
+
+The lasso regularized regression chooses the intercept and $X^7$ as the
+best model.
+
+Thus lasso performs better as compared to best subset approach as it
+gives model close to simulated value of $Y$.
