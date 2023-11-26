@@ -71,10 +71,10 @@ Create a `train` dataset from 70% of the observations.
 
 ```{r 9-split-dataset}
 set.seed(4912)
-college_split <- initial_split(college_df %>% 
+college_split <- initial_split(college_df, 
                                     
                                     # drop 'enroll', 'f_undergrad' high VIF
-                                    select(-enroll, -f_undergrad), 
+                                    # select(-enroll, -f_undergrad), 
                                prop = 0.7)
 
 college_train <- training(college_split)
